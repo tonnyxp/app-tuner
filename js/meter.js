@@ -13,6 +13,7 @@ Meter.prototype.init = function() {
     const $scale = document.createElement('div')
     $scale.className = 'meter-scale'
     $scale.style.transform = 'rotate(' + (i * 9 - 45) + 'deg)'
+
     if (i % 5 === 0) {
       $scale.classList.add('meter-scale-strong')
     }
@@ -25,4 +26,10 @@ Meter.prototype.init = function() {
  */
 Meter.prototype.update = function(deg) {
   this.$pointer.style.transform = 'rotate(' + deg + 'deg)'
+
+  if (this.$pointer.style.transform === 'rotate(0deg)') {
+    this.$pointer.classList.add('meter-pointer-green')
+  } else {
+    this.$pointer.classList.remove('meter-pointer-green')
+  }
 }

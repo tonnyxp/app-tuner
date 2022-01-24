@@ -136,6 +136,10 @@ body {
   border-top-width: 20px;
 }
 
+.meter-pointer-green {
+  background: #2ecc71;
+}
+
 .frequency-bars {
   position: fixed;
   bottom: 0;
@@ -169,5 +173,5 @@ body {
   position: absolute;
   top: 16px;
   right: 16px;
-  width: 25%;
+  width: 35%;
 }
