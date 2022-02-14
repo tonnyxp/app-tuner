@@ -1,4 +1,4 @@
-const Application = function() {
+const Application = function () {
   this.initA4()
   this.tuner = new Tuner(this.a4)
   this.notes = new Notes('.notes', this.tuner)
@@ -13,10 +13,10 @@ Application.prototype.initA4 = function () {
   this.$a4.innerHTML = this.a4
 }
 
-Application.prototype.start = function() {
+Application.prototype.start = function () {
   const self = this
 
-  this.tuner.onNoteDetected = function(note) {
+  this.tuner.onNoteDetected = function (note) {
     if (self.notes.isAutoMode) {
       if (self.lastNote === note.name) {
         self.update(note)
@@ -26,9 +26,11 @@ Application.prototype.start = function() {
     }
   }
 
-  swal.fire('Bienvenido a Rhinotuner!').then(function() {
+  swal.fire('Bienvenido a Rhinotuner!').then(function () {
     self.tuner.init()
     self.frequencyData = new Uint8Array(self.tuner.analyser.frequencyBinCount)
+    // boton en color rojo
+    document.querySelector('.auto-mode').classList.add('active')
   })
 
   this.$a4.addEventListener('click', function () {
@@ -51,7 +53,7 @@ Application.prototype.start = function() {
   this.updateFrequencyBars()
 }
 
-Application.prototype.updateFrequencyBars = function() {
+Application.prototype.updateFrequencyBars = function () {
   if (this.tuner.analyser) {
     this.tuner.analyser.getByteFrequencyData(this.frequencyData)
     this.frequencyBars.update(this.frequencyData)
@@ -59,13 +61,21 @@ Application.prototype.updateFrequencyBars = function() {
   requestAnimationFrame(this.updateFrequencyBars.bind(this))
 }
 
-Application.prototype.update = function(note) {
+Application.prototype.update = function (note) {
   this.notes.update(note)
   this.meter.update((note.cents / 50) * 45)
+
+  // consultar puntero y activar la nota verde
+  const activeNote = this.notes.getActiveNote()
+  if (this.meter.getValue() == 0) {
+    if (activeNote) {
+      this.notes.active(activeNote, true)
+    }
+  }
 }
 
 // noinspection JSUnusedGlobalSymbols
-Application.prototype.toggleAutoMode = function() {
+Application.prototype.toggleAutoMode = function () {
   this.notes.toggleAutoMode()
 }
 

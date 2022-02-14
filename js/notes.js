@@ -1,4 +1,4 @@
-const Notes = function(selector, tuner) {
+const Notes = function (selector, tuner) {
   this.tuner = tuner
   this.isAutoMode = true
   this.$root = document.querySelector(selector)
@@ -9,7 +9,7 @@ const Notes = function(selector, tuner) {
   this.createNotes()
 }
 
-Notes.prototype.createNotes = function() {
+Notes.prototype.createNotes = function () {
   const minOctave = 2
   const maxOctave = 5
   for (var octave = minOctave; octave <= maxOctave; octave += 1) {
@@ -37,8 +37,8 @@ Notes.prototype.createNotes = function() {
   }
 
   const self = this
-  this.$notes.forEach(function($note) {
-    $note.addEventListener('click', function() {
+  this.$notes.forEach(function ($note) {
+    $note.addEventListener('click', function () {
       if (self.isAutoMode) {
         return
       }
@@ -55,21 +55,26 @@ Notes.prototype.createNotes = function() {
   })
 }
 
-Notes.prototype.active = function($note) {
+Notes.prototype.active = function ($note, $puntero = false) {
   this.clearActive()
-  $note.classList.add('active')
+  if ($puntero) {
+    $note.classList.add('active-green')
+  } else {
+    $note.classList.add('active')
+  }
   this.$notesList.scrollLeft =
     $note.offsetLeft - (this.$notesList.clientWidth - $note.clientWidth) / 2
 }
 
-Notes.prototype.clearActive = function() {
+Notes.prototype.clearActive = function () {
   const $active = this.$notesList.querySelector('.active')
   if ($active) {
     $active.classList.remove('active')
+    $active.classList.remove('active-green')
   }
 }
 
-Notes.prototype.update = function(note) {
+Notes.prototype.update = function (note) {
   if (note.value in this.$notesMap) {
     this.active(this.$notesMap[note.value])
     this.$frequency.childNodes[0].textContent = parseFloat(
@@ -78,9 +83,13 @@ Notes.prototype.update = function(note) {
   }
 }
 
-Notes.prototype.toggleAutoMode = function() {
+Notes.prototype.toggleAutoMode = function () {
   if (this.isAutoMode) {
     this.clearActive()
   }
   this.isAutoMode = !this.isAutoMode
+}
+
+Notes.prototype.getActiveNote = function () {
+  return this.$notesList.querySelector('.active')
 }

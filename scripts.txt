@@ -1,0 +1,8 @@
+workbox wizard
+Nota: una cosa es el archivo de configuración, y otra cosa es el service worker. 
+Workbox lee el archivo de configuración y genera el service worker.
+
+workbox generateSW workbox-config.js
+
+Nota: cada que hagas un cambio debes generar el ServiceWorker de nuevo. 
+Presta atención; dije Service Worker, y no archivo de configuración, pues el archivo de configuración se debe generar una vez por proyecto.

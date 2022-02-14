@@ -1,6 +1,6 @@
 @font-face {
   font-family: Montserrat;
-  src: url('../fonts/Montserrat-Regular.ttf');
+  src: url("../fonts/Montserrat-Regular.ttf");
 }
 
 html {
@@ -9,7 +9,7 @@ html {
 
 body {
   position: fixed;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   background-color: #231f20;
   color: #fff;
   margin: 0;
@@ -41,6 +41,10 @@ body {
 
 .note.active {
   color: #ea3223;
+}
+
+.note.active-green {
+  color: #2ecc71;
 }
 
 .notes-list {
@@ -174,4 +178,8 @@ body {
   top: 16px;
   right: 16px;
   width: 35%;
+}
+
+.swal2-styled.swal2-confirm {
+  background: #ea3223 !important;
 }

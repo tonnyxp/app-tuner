@@ -2,13 +2,13 @@
  * @param {string} selector
  * @constructor
  */
-const Meter = function(selector) {
+const Meter = function (selector) {
   this.$root = document.querySelector(selector)
   this.$pointer = this.$root.querySelector('.meter-pointer')
   this.init()
 }
 
-Meter.prototype.init = function() {
+Meter.prototype.init = function () {
   for (var i = 0; i <= 10; i += 1) {
     const $scale = document.createElement('div')
     $scale.className = 'meter-scale'
@@ -24,7 +24,7 @@ Meter.prototype.init = function() {
 /**
  * @param {number} deg
  */
-Meter.prototype.update = function(deg) {
+Meter.prototype.update = function (deg) {
   this.$pointer.style.transform = 'rotate(' + deg + 'deg)'
 
   if (this.$pointer.style.transform === 'rotate(0deg)') {
@@ -32,4 +32,8 @@ Meter.prototype.update = function(deg) {
   } else {
     this.$pointer.classList.remove('meter-pointer-green')
   }
+}
+
+Meter.prototype.getValue = function () {
+  return parseInt(this.$pointer.style.transform.replace('rotate(', '').replace('deg)', ''))
 }
