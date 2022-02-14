@@ -29,8 +29,6 @@ Application.prototype.start = function () {
   swal.fire('Bienvenido a Rhinotuner!').then(function () {
     self.tuner.init()
     self.frequencyData = new Uint8Array(self.tuner.analyser.frequencyBinCount)
-    // boton en color rojo
-    document.querySelector('.auto-mode').classList.add('active')
   })
 
   this.$a4.addEventListener('click', function () {
