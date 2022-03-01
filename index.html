@@ -15,22 +15,44 @@
     </script>
   </head>
   <body>
-    <canvas class="frequency-bars"></canvas>
-    <div class="meter">
-      <div class="meter-dot"></div>
-      <div class="meter-pointer"></div>
-    </div>
-    <div class="notes">
-      <div class="notes-list"></div>
-      <div class="frequency"> <span>Hz</span></div>
-    </div>
-    <div class="a4">A<sub>4</sub> = <span>440</span> Hz</div>
-    <div>
-      <img class="logo" src="images/light-rhinotuner.svg" alt="logo-rhinotuner">
+    <div id="app">
+      <canvas class="frequency-bars"></canvas>
+      <div class="meter">
+        <div class="meter-dot"></div>
+        <div class="meter-pointer"></div>
+      </div>
+      <template v-show="instrumento">
+        <img class="instrument" v-bind:src="instrumento.imagen"/>
+      </template>
+      <div class="notes">
+        <div class="notes-list"></div>
+        <div class="frequency"><span>Hz</span></div>
+      </div>
+      <div class="menu">
+        <span class="mobile-btn"></span>
+        <ul class="menu-mobile">
+          <template v-for="instrumento in instrumentos">
+            <li v-on:click="onClickInstrumento(instrumento)">{{ instrumento.nombre }}</li>
+          </template>
+        </ul>
+      </div>
+      <div class="a4">
+        A<sub>4</sub> = <span>440</span> Hz
+      </div>
+      <div>
+        <img class="logo" src="images/light-rhinotuner.svg" alt="logo-rhinotuner">
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="https://cdn.jsdelivr.net/npm/aubiojs"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+    <script src="vue/app.js"></script>
+
+    <script src="js/menu.js"></script>
     <script src="js/tuner.js"></script>
     <script src="js/meter.js"></script>
     <script src="js/frequency-bars.js"></script>

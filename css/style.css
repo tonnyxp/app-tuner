@@ -20,6 +20,68 @@ body {
   -moz-user-select: none;
 }
 
+.menu {
+  position: absolute;
+}
+
+.mobile-btn {
+  margin: 50px auto 0px auto;
+  display: block;
+  color: #ea3223;
+  height: 36px;
+  width: 36px;
+  border-top: 4px solid;
+  position: relative;
+  cursor: pointer;
+  -webkit-backface-visibility: hidden;
+}
+
+.mobile-btn::after,
+.mobile-btn::before {
+  content: "";
+  display: block;
+  height: 4px;
+  margin-top: 6px;
+  background: currentColor;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.mobile-btn.active {
+  border-top-color: transparent;
+}
+
+.mobile-btn.active::after {
+  margin-top: 0px;
+  top: 2px;
+  transform: rotate(45deg);
+}
+
+.mobile-btn.active::before {
+  margin-top: 0px;
+  top: 6px;
+  transform: rotate(135deg);
+}
+
+.menu-mobile {
+  opacity: 0;
+  visibility: hidden;
+  text-align: center;
+  margin-top: 0px;
+  transform: translate3D(0, -50px, 0);
+  transition: 0.3s;
+}
+
+.menu-mobile li {
+  line-height: 1.4em;
+}
+
+.menu-mobile.active {
+  visibility: visible;
+  opacity: 1;
+  transform: translate3D(0, 0, 0);
+}
+
 .notes {
   margin: auto;
   width: 400px;
@@ -111,6 +173,7 @@ body {
   transition: transform 0.5s;
   position: absolute;
   right: 50%;
+  border-radius: 50%;
 }
 
 .meter-dot {
@@ -182,4 +245,35 @@ body {
 
 .swal2-styled.swal2-confirm {
   background: #ea3223 !important;
+}
+
+.instrument {
+  position: relative;
+  float: right;
+  margin-right: 180px;
+  top: 200px;
+  width: 10%;
+  height: auto;
+}
+
+.instrument ul,
+li {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.instrument ul,
+li:hover {
+  color: #ea3223;
+}
+
+@media screen and (max-width: 768px) {
+  .instrument {
+    position: absolute;
+    width: 10%;
+    top: 6%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
