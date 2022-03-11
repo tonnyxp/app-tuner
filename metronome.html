@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrónomo</title>
+  <link rel="stylesheet" href="css/metronome.css">
+</head>
+<body> 
+
+  <!-- Retornar al index -->
+  <a href="index.html">
+    <svg id="back-btn_svg" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="67" height="67" viewBox="0 0 172 172" style=" fill:#000000;"><g fill="none" fill-rule="none" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none" fill-rule="nonzero"></path><g fill="#ea3223" fill-rule="evenodd"><path d="M159.54141,63.52295h-86.53564v-29.67843v-4.95963l-46.97762,42.01799l-19.79885,15.63276v8.33218l19.79885,15.63276l46.97762,42.01799v-4.95963v-29.67843h86.53564v-1.22999v-51.89758z"></path></g></g></svg></a>
+  <img class="logo" src="images/light-rhinotuner.svg" alt="logo-rhinotuner"> 
+  <div id="app">
+    <Metronome :sounds = 'soundsURL'/>
+  </div>
+
+  <template id='metronome'>
+    <div class="metronome">
+    <div class="metronome__body" :class = '[ret ? metronomeBlinkOn : metronomeBlinkOff]'>
+      <div class="temp-controller">
+        <button class="temp-controller__down counter-btn" @click="setTemp('down')">-</button>
+        <input type='text' class="temp-controller__input" v-model.number ='bpm' @keyup='setInputTemp' :value='currentBpm'>
+        <button class="temp-controller__up counter-btn" @click="setTemp('up')">+</button>
+      </div>
+      <div class="metronome__body-counters">
+        <div class="editSize-modal__counter">
+          <div class="counter__btn-section">
+            <button class="counter__up counter-btn" @click='bitUp'>+</button>
+            <button class="counter__down counter-btn" @click='bitDown'>-</button>
+          </div>
+          <div class="editSize-modal__prewiew">{{ currentSize.bit }}</div>
+        </div>
+        <div class="editSize-modal__counter">
+          <div class="counter__btn-section">
+            <button class="counter__up counter-btn" @click='partUp'>+</button>
+            <button class="counter__down counter-btn" @click = 'partDown'>-</button>
+          </div>
+          <div class="editSize-modal__prewiew">{{ currentSize.part }}</div>
+        </div>
+     </div>
+      <button class="play-btn" @click='playMetronome'>
+        <svg v-if='!isPlay' id="play-btn_svg" x="0px" y="0px" viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve" width="62px" height="62px">
+          <g><path d="M45.563,29.174l-22-15c-0.307-0.208-0.703-0.231-1.031-0.058C22.205,14.289,22,14.629,22,15v30   c0,0.371,0.205,0.711,0.533,0.884C22.679,45.962,22.84,46,23,46c0.197,0,0.394-0.059,0.563-0.174l22-15   C45.836,30.64,46,30.331,46,30S45.836,29.36,45.563,29.174z M24,43.107V16.893L43.225,30L24,43.107z" fill="#ea3223"/>
+          <path d="M30,0C13.458,0,0,13.458,0,30s13.458,30,30,30s30-13.458,30-30S46.542,0,30,0z M30,58C14.561,58,2,45.439,2,30   S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z" fill="#ea3223"/>
+          </g>
+        </svg>
+        <svg v-if='isPlay' version="1.1" id="pause-btn_svg" x="0px" y="0px" width = '62' height = '62'
+           viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
+        <g>
+          <path d="M30,0C13.458,0,0,13.458,0,30s13.458,30,30,30s30-13.458,30-30S46.542,0,30,0z M30,58C14.561,58,2,45.439,2,30
+            S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z" fill='#ea3223'/>
+          <path d="M33,46h8V14h-8V46z M35,16h4v28h-4V16z" fill='#ea3223'/>
+          <path d="M19,46h8V14h-8V46z M21,16h4v28h-4V16z" fill='#ea3223'/>
+        </g>
+        </svg>
+      </button>
+      <button class="menu-btn" @click='openCloseEditBit'>
+        <svg version="1.1" id="menu-btn_svg" x="0px" y="0px" width='40' height='40'viewBox="0 0 56 56" style="enable-background:new 0 0 56 56;" xml:space="preserve">
+          <g>
+            <path d="M28,0C12.561,0,0,12.561,0,28s12.561,28,28,28s28-12.561,28-28S43.439,0,28,0z M28,54C13.663,54,2,42.336,2,28
+              S13.663,2,28,2s26,11.664,26,26S42.337,54,28,54z" fill='#ea3223'/>
+            <path d="M40,16H16c-0.553,0-1,0.448-1,1s0.447,1,1,1h24c0.553,0,1-0.448,1-1S40.553,16,40,16z" fill='#ea3223'/>
+            <path d="M40,27H16c-0.553,0-1,0.448-1,1s0.447,1,1,1h24c0.553,0,1-0.448,1-1S40.553,27,40,27z" fill='#ea3223'/>
+            <path d="M40,38H16c-0.553,0-1,0.448-1,1s0.447,1,1,1h24c0.553,0,1-0.448,1-1S40.553,38,40,38z" fill='#ea3223'/>
+          </g>
+        </svg>
+      </button>
+    </div>	
+    <div class="edit-bit" v-if='isEditBitOpen'>
+      <div class="edit-bit__notes-bar">
+        <div class="blink-test" :class = '[ret ? blinkTestActive : blinkTestInactive]'></div>
+      </div>
+      <div class="edit-bit__plate">
+        <div class="plate-sizer" @click='handleEditSize'>
+          <span class="plate-sizer__bit">{{ currentSize.bit }}</span>
+          <span class="plate-sizer__part">{{ currentSize.part }}</span>	
+        </div>
+        <div class="edit-bit__work-area">
+          <button class="bitNode" 
+                  :class='[{bitNodeActive: value.status}, {tickActive: value.isTickNow}]' 
+                  v-for='value, index in bitNodes' 
+                  :key='value.key' 
+                  :style='[btnNodeStyle]' 
+                  @click='setPoint(value.id)'>{{ value.id }}</button>
+        </div>
+        <div class="plate-sizer__editSize-modal" :class = "[isEditSizeOpen ? editSizeOpen : editSizeClose ]">
+          <div class="editSize-modal__counters-wrapper">
+            <div class="editSize-modal__counter">
+              <div class="counter__btn-section">  <!-- Yaaaap... I know it was necessary to make a separate component for buttons -->
+                <button class="counter__up counter-btn" @click='bitUp'>+</button>
+                <button class="counter__down counter-btn" @click='bitDown'>-</button>
+              </div>
+              <div class="editSize-modal__prewiew">{{ currentSize.bit }}</div>
+            </div>
+            <div class="editSize-modal__counter">
+              <div class="counter__btn-section">
+                <button class="counter__up counter-btn" @click='partUp'>+</button>
+                <button class="counter__down counter-btn" @click = 'partDown'>-</button>
+              </div>
+              <div class="editSize-modal__prewiew">{{ currentSize.part }}</div>
+            </div>
+          </div>
+          <button class="plate-sizer__close-btn" @click = 'handleEditSize'>x</button>
+        </div>
+      </div>
+      <button class="edit-bit__close-btn" @click = 'openCloseEditBit'>x</button>
+    </div>
+   </div>
+  </template>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="vue/metronome.js"></script>
+</body>
+</html>

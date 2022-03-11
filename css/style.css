@@ -22,6 +22,8 @@ body {
 
 .menu {
   position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .mobile-btn {
@@ -80,6 +82,13 @@ body {
   visibility: visible;
   opacity: 1;
   transform: translate3D(0, 0, 0);
+}
+
+a:link,
+a:visited,
+a:active {
+  color: #fff;
+  text-decoration: none !important;
 }
 
 .notes {
@@ -230,6 +239,7 @@ body {
   position: absolute;
   top: 16px;
   left: 16px;
+  opacity: 0;
 }
 
 .a4 span {
